@@ -34,6 +34,26 @@ void FirstFit(Partition* listPart, int numOfPart, Process* listProc, int numOfPr
 		}
 	}
 }
+// Algorithm Next Fit
+void NextFit(Partition* listPart, int numOfPart, Process* listProc, int numOfProc) {
+	int next_partition_id = 6;
+	for (int i = 0; i < numOfProc; i++) {
+		for (int k = 0; k < numOfPart; k++) {
+			int j = (k + next_partition_id) % numOfPart;
+			if (listProc[i].memory_required > listPart[j].size) continue;
+			else {
+				listProc[i].allocated = true;
+				listProc[i].allocated_partition = listPart[j].id;
+				listPart[j].alloted = true;
+				listPart[j].size -= listProc[i].memory_required;
+				listPart[j].noOfProc.push_back(listProc[i].id);
+				if (j + 1 < numOfPart) next_partition_id = j + 1;
+				else next_partition_id = 0;
+				break;
+			}
+		}
+	}
+}
 // Algorithm Best Fit
 void BestFit(Partition* listPart, int numOfPart, Process* listProc, int numOfProc) {
 	for (int i = 0; i < numOfProc; i++) {
@@ -133,6 +153,13 @@ void ChooseAlgorithm(Partition* listPart, int numOfPart, Process* listProc, int 
 		FirstFit(listPart, numOfPart, listProc, numOfProc);
 		end = clock();
 		break;
+	case 'N':
+		cout << "                ~ NEXT FIT ALGORITHM ~                 " << endl;
+		cout << "-------------------------------------------------------" << endl;
+		start = clock();
+		NextFit(listPart, numOfPart, listProc, numOfProc);
+		end = clock();
+		break;
 	case 'B':
 		cout << "                ~ BEST FIT ALGORITHM ~                 " << endl;
 		cout << "-------------------------------------------------------" << endl;
@@ -168,26 +195,29 @@ int main() {
 	//double timeUsed, timeUsed2, timeUsed3;
 	cout << "Enter the number of partition: ";
 	cin >> numOfPart;
-	Partition* listPart = new Partition[numOfPart], * listPart2 = new Partition[numOfPart], * listPart3 = new Partition[numOfPart];
+	Partition* listPart = new Partition[numOfPart], * listPart2 = new Partition[numOfPart]; 
+	Partition* listPart3 = new Partition[numOfPart], * listPart4 = new Partition[numOfPart];
 	cout << "Enter the size of each partition: ";
 	for (int i = 0; i < numOfPart; i++) {
-		listPart[i].id = listPart2[i].id = listPart3[i].id = i + 1;
+		listPart[i].id = listPart2[i].id = listPart3[i].id = listPart4[i].id = i + 1;
 		cin >> listPart[i].size;
-		listPart2[i].size = listPart3[i].size = listPart[i].size;
+		listPart2[i].size = listPart3[i].size = listPart4[i].size = listPart[i].size;
 		totalMemory += listPart[i].size;
 	}
 	cout << "Enter the number of process: ";
 	cin >> numOfProc;
-	Process* listProc = new Process[numOfProc], * listProc2 = new Process[numOfProc], * listProc3 = new Process[numOfProc];
+	Process* listProc = new Process[numOfProc], * listProc2 = new Process[numOfProc];
+	Process* listProc3 = new Process[numOfProc], * listProc4 = new Process[numOfProc];
 	cout << "Enter memory required for each process: ";
 	for (int i = 0; i < numOfProc; i++) {
-		listProc[i].id = listProc2[i].id = listProc3[i].id = i + 1;
+		listProc[i].id = listProc2[i].id = listProc3[i].id = listProc4[i].id = i + 1;
 		cin >> listProc[i].memory_required;
-		listProc2[i].memory_required = listProc3[i].memory_required = listProc[i].memory_required;
+		listProc2[i].memory_required = listProc3[i].memory_required = listProc4[i].memory_required = listProc[i].memory_required;
 	}
 	ChooseAlgorithm(listPart, numOfPart, listProc, numOfProc, totalMemory, 'F');
-	ChooseAlgorithm(listPart2, numOfPart, listProc2, numOfProc, totalMemory, 'B');
-	ChooseAlgorithm(listPart3, numOfPart, listProc3, numOfProc, totalMemory, 'W');
+	ChooseAlgorithm(listPart2, numOfPart, listProc2, numOfProc, totalMemory, 'N');
+	ChooseAlgorithm(listPart3, numOfPart, listProc2, numOfProc, totalMemory, 'B');
+	ChooseAlgorithm(listPart4, numOfPart, listProc3, numOfProc, totalMemory, 'W');
 }
 
 // Case test
