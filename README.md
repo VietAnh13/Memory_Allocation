@@ -8,6 +8,10 @@ Input includes the number and size of each partition, as well as the number and 
 
 ![first_fit_img](/images/first_fit%20(Memory%20Allocation).jpg)
 
+## Next fit
+
+![next_fit_img](/images/next_fit%20(Memory%20Allocation).jpg)
+
 ## Best Fit
 
 ![best_fit_img](/images/best_fit%20(Memory%20Allocation).jpg)
